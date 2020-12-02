@@ -1,9 +1,10 @@
 def validate_password(inp: str):
     rule, phrase = inp.split(": ")
-    counts, target = rule.split(" ")
-    min_, max_ = counts.split("-")
-    count = phrase.count(target)
-    return count >= int(min_) and count <= int(max_)
+    phrase = list(phrase)
+    ids, target = rule.split(" ")
+    id_1, id_2 = ids.split("-")
+    id_1, id_2 = int(id_1), int(id_2)
+    return (phrase[id_1 - 1] == target) != (phrase[id_2 - 1] == target)
 
 
 def count_valid_passwords(arr):
@@ -16,7 +17,7 @@ def count_valid_passwords(arr):
 test_input = ["1-3 a: abcde",
               "1-3 b: cdefg",
               "2-9 c: ccccccccc"]
-test_output = 2
+test_output = 1
 assert count_valid_passwords(test_input) == test_output
 
 
