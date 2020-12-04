@@ -1,8 +1,31 @@
-def p(i):
-    a = ""
-    for l in (i + "\n").split("\n"):
-        if l == "":
-            print("a")
+import re
+
+
+VALID_LIST = ["ecl:",
+              "pid:",
+              "eyr:",
+              "hcl:",
+              "byr:",
+              "iyr:",
+              # "cid:",
+              "hgt:"]
+
+
+def validate_passport(passport: str):
+    fields = re.findall("[a-z]{3}:", passport)
+    for v in VALID_LIST:
+        if not v in fields:
+            return False
+    return True
+
+
+def count_valid_passports(passport_list: str):
+    passport_list = passport_list.strip()
+    passports = re.split("\n\n", passport_list)
+    valid_count = 0
+    for passport in passports:
+        valid_count += validate_passport(passport)
+    return valid_count
 
 
 test_input = """
@@ -23,4 +46,11 @@ iyr:2011 ecl:brn hgt:59in
 
 test_output = 2
 
-p(test_input)
+assert count_valid_passports(test_input) == test_output
+
+
+f = open("inputs/input_04.txt")
+d = f.read()
+#d = [n.replace("\n", "") for n in f.readlines()]
+f.close()
+print(count_valid_passports(d))
