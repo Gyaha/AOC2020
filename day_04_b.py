@@ -79,7 +79,8 @@ def validate_passport(passport: str):
             if not validate_hgt(val):
                 return False
         else:
-            print(pre, val)
+            #print(pre, val)
+            pass
     return True
 
 
