@@ -7,36 +7,23 @@ def create_rules(s: str) -> dict:
             if b == "no other bags.":
                 continue
             b_split = b.split(" ")
+            count = int(b_split[0])
             name = " ".join(b_split[1:3])
-            contained_list.append(name)
+            contained_list.append([name, count])
         rules[current_bag] = contained_list
     return rules
 
 
-def create_reverse_rules(s: str) -> dict:
-    rules = create_rules(s)
-    new_rules = {}
-    for r in rules:
-        l = rules[r]
-        for rl in l:
-            if not rl in new_rules:
-                new_rules[rl] = []
-            if not r in new_rules[rl]:
-                new_rules[rl].append(r)
-    return new_rules
+def count_content(rules: dict, target: str) -> int:
+    t = rules[target]
+    r = 1
+    for a in t:
+        r += a[1] * count_content(rules, a[0])
+    return r
 
 
-def list_with_reverse_rules(rules: dict, target: str) -> list:
-    a = [target]
-    if target not in rules:
-        return a
-    for t in rules[target]:
-        a += list_with_reverse_rules(rules, t)
-    return a
-
-
-def count_with_reverse_rules(rules: dict, target: str) -> int:
-    return len(set(list_with_reverse_rules(rules, target))) - 1
+def count_contents(rules: dict, target: str) -> int:
+    return count_content(rules, target) - 1
 
 
 test_input = """light red bags contain 1 bright white bag, 2 muted yellow bags.
@@ -48,12 +35,23 @@ dark olive bags contain 3 faded blue bags, 4 dotted black bags.
 vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.
 faded blue bags contain no other bags.
 dotted black bags contain no other bags."""
-test_output = 4
+test_output = 32
 
-assert count_with_reverse_rules(create_rules(test_input), "shiny gold") == test_output
+assert count_contents(create_rules(test_input), "shiny gold") == test_output
+
+test_input = """shiny gold bags contain 2 dark red bags.
+dark red bags contain 2 dark orange bags.
+dark orange bags contain 2 dark yellow bags.
+dark yellow bags contain 2 dark green bags.
+dark green bags contain 2 dark blue bags.
+dark blue bags contain 2 dark violet bags.
+dark violet bags contain no other bags."""
+test_output = 126
+
+assert count_contents(create_rules(test_input), "shiny gold") == test_output
 
 
 f = open("inputs/input_07.txt")
 d = f.read().strip("\n")
 f.close()
-print(count_with_reverse_rules(create_reverse_rules(d), "shiny gold"))
+print(count_contents(create_rules(d), "shiny gold"))
