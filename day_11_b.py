@@ -27,14 +27,6 @@ def count_seated_around(seat_map: list, h: int, w: int, x: int, y: int) -> int:
     c += look_direction(seat_map, h, w, x, y, 0, +1) == "#"
     c += look_direction(seat_map, h, w, x, y, +1, +1) == "#"
 
-    # c += get_tile(seat_map, h, w, x - 1, y - 1) == "#"
-    # c += get_tile(seat_map, h, w, x, y - 1) == "#"
-    # c += get_tile(seat_map, h, w, x + 1, y - 1) == "#"
-    # c += get_tile(seat_map, h, w, x - 1, y) == "#"
-    # c += get_tile(seat_map, h, w, x + 1, y) == "#"
-    # c += get_tile(seat_map, h, w, x - 1, y + 1) == "#"
-    # c += get_tile(seat_map, h, w, x, y + 1) == "#"
-    # c += get_tile(seat_map, h, w, x + 1, y + 1) == "#"
     return c
 
 
