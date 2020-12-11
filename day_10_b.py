@@ -1,29 +1,19 @@
-"""
-(0), 1, 4, 5, 6, 7, 10, 11, 12, 15, 16, 19, (22) 
-(0), 1, 4, 6, 7, 10, 11, 12, 15, 16, 19, (22) 
-(0), 1, 4, 5, 7, 10, 11, 12, 15, 16, 19, (22) 
-(0), 1, 4, 7, 10, 11, 12, 15, 16, 19, (22) 
-
-
-(0), 1, 4, 5, 6, 7, 10, 11, 12, 15, 16, 19, (22)
-(0), 1, 4, 5, 6, 7, 10, 12, 15, 16, 19, (22)
-(0), 1, 4, 5, 7, 10, 11, 12, 15, 16, 19, (22)
-(0), 1, 4, 5, 7, 10, 12, 15, 16, 19, (22)
-(0), 1, 4, 6, 7, 10, 11, 12, 15, 16, 19, (22)
-(0), 1, 4, 6, 7, 10, 12, 15, 16, 19, (22)
-(0), 1, 4, 7, 10, 11, 12, 15, 16, 19, (22)
-(0), 1, 4, 7, 10, 12, 15, 16, 19, (22)
-"""
-
-
 def count_adapter_possibilities(s: str) -> int:
-    l = sorted([int(l) for l in s.strip("\n").splitlines()])
-    print(l)
-    c = 1
-    for i in range(len(l)):
-        # ???
-        pass
-    return c
+    l = sorted([0] + [int(l) for l in s.strip("\n").splitlines()])
+    return recurve_adapters(l, {}, len(l) - 1)
+
+
+def recurve_adapters(l: list, m: dict, i: int) -> int:
+    if i in m:
+        return m[i]
+    if i < 1:
+        return 1
+    s = 0
+    for g in range(1, 4):
+        if i - g >= 0 and l[i] - l[i - g] <= 3:
+            s += recurve_adapters(l, m, i - g)
+    m[i] = s
+    return s
 
 
 test_input = """16
@@ -38,7 +28,6 @@ test_input = """16
 12
 4"""
 test_output = 8
-
 assert count_adapter_possibilities(test_input) == test_output
 
 test_input = """28
@@ -73,7 +62,6 @@ test_input = """28
 10
 3"""
 test_output = 19208
-
 assert count_adapter_possibilities(test_input) == test_output
 
 
