@@ -41,17 +41,6 @@ def find_next_bus_restart(s: str) -> int:
     return chinese_remainder(n, a)
 
 
-def is_prime(i: int) -> bool:
-    if i == None:
-        return True
-    if i <= 1:
-        return False
-    for j in range(2, i):
-        if (j % i) == 0:
-            return False
-    return True
-
-
 assert chinese_remainder([27, 20], [15, 16]) == 96
 assert chinese_remainder([3, 5, 7], [2, 3, 2]) == 23
 assert chinese_remainder([7, 13, 19, 31, 59], [0, -1, -7, -6, -4]) == 1068781
