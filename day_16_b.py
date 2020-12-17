@@ -1,12 +1,20 @@
-def read_rules(s: str) -> list:
-    rules = []
+def read_fields(s: str) -> list:
+    fields = []
     for r in s.splitlines():
         name, n = r.split(": ")
         n_l, n_r = n.split(" or ")
         n_l_l, n_l_h = [int(a) for a in n_l.split("-")]
         n_r_l, n_r_h = [int(a) for a in n_r.split("-")]
-        rules.append([n_l_l, n_l_h, n_r_l, n_r_h])
-    return rules
+        fields.append([n_l_l, n_l_h, n_r_l, n_r_h])
+    return fields
+
+
+def read_target_fields(s: str, t: str) -> list:
+    r = []
+    for i, s in enumerate(s.splitlines()):
+        if t in s:
+            r.append(i)
+    return r
 
 
 def read_tickets(s: str) -> list:
@@ -17,135 +25,103 @@ def read_tickets(s: str) -> list:
     return tickets
 
 
-def read_input(s: str) -> (list, list):
-    rules, my_ticket, other_tickets = s.split("\n\n")
-    rules = read_rules(rules)
-    my_ticket = read_tickets(my_ticket)
-    other_tickets = read_tickets(other_tickets)
-    return rules, other_tickets + my_ticket
+def discard_invalid(tickets: list, rules: list) -> list:
+    valid_tickets = []
+    for ticket in tickets:
+        if validate_ticket_all_fields(ticket, rules):
+            valid_tickets.append(ticket)
+    return valid_tickets
 
 
-def discard_invalid_tickets(tickets: list, rules: list) -> list:
-    r = []
-    for t in tickets:
-        if validate_ticket_to_all_rules(t, rules):
-            r.append(t)
-    return r
-
-
-def validate_ticket_to_all_rules(ticket: list, rules: list) -> bool:
-    for n in ticket:
-        if not validate_number_to_all_rules(n, rules):
+def validate_ticket_all_fields(ticket: list, fields: list) -> bool:
+    for v in ticket:
+        if not validate_value_all_fields(v, fields):
             return False
     return True
 
 
-def validate_number_to_all_rules(n: int, rules: list) -> bool:
-    for r in rules:
-        if validate_number_to_rule(n, r):
+def validate_value_all_fields(v: int, fields: list) -> bool:
+    for f in fields:
+        if validate_value_field(v, f):
             return True
     return False
 
 
-def validate_row_rules(tickets: list, rules: list) -> dict:
-    valid_row_rules = {}
-    for row in range(len(rules)):
-        for rule in range(len(rules)):
-            if validate_row_on_rule(tickets, rules[rule], row):
-                if not row in valid_row_rules:
-                    valid_row_rules[row] = []
-                valid_row_rules[row].append(rule)
-    return valid_row_rules
+def validate_value_field(v: int, f: list) -> bool:
+    return ((v >= f[0] and v <= f[1]) or (v >= f[2] and v <= f[3]))
 
 
-def validate_row_on_rule(tickets: list, rule: list, row: int):
-    for t in tickets:
-        if not validate_number_to_rule(t[row], rule):
+def validate_field_rows(tickets: list, fields: list) -> list:
+    valid_field_rows = [[] for _ in range(len(fields))]
+    for row in range(len(fields)):
+        for field in range(len(fields)):
+            if validate_field_row(tickets, fields[field], row):
+                valid_field_rows[row].append(field)
+    return valid_field_rows
+
+
+def validate_field_row(tickets: list, field: list, row: int) -> bool:
+    for ticket in tickets:
+        if not validate_value_field(ticket[row], field):
             return False
     return True
 
 
-def validate_tickets_to_rules_in_order(tickets: list, rules: list, order: list) -> bool:
-    for t in tickets:
-        if not validate_ticket_to_rules_in_order(t, rules, order):
-            return False
-    return True
-
-
-def validate_ticket_to_rules_in_order(ticket: list, rules: list, order: list) -> bool:
-    for ti, ri in enumerate(order):
-        if not validate_number_to_rule(ticket[ti], rules[ri]):
-            return False
-    return True
-
-
-def validate_number_to_rule(n: int, r: list) -> bool:
-    return ((n >= r[0] and n <= r[1]) or (n >= r[2] and n <= r[3]))
-
-
-def get_valid_ticket_row_permutaitions(s: str):
-    rules, tickets = read_input(s)
-    tickets = discard_invalid_tickets(tickets, rules)
-    valid_row_rules = validate_row_rules(tickets, rules)
-    condence_valid_row_rules(valid_row_rules)
-    valid_permutations = get_valid_row_permutations(valid_row_rules, 0, [0] * len(rules), [])
-    return valid_permutations
-
-
-def get_valid_row_permutations(valid_row_rules: dict, i: int, per: list, l: list) -> list:
-    if i >= len(per):
-        l.append(per.copy())
-        return
-    for j in valid_row_rules[i]:
-        if not j in per[:i]:
-            per[i] = j
-            get_valid_row_permutations(valid_row_rules, i + 1, per, l)
-    return l
-
-
-def condence_valid_row_rules(valid_row_rules: dict):
+def condence_valid_field_rows(valid_field_rows: list) -> list:
     done = False
     while not done:
         done = True
-        for rule, i in enumerate(valid_row_rules):
-            if len(valid_row_rules[i]) == 1:
-                if remove_row_from_other_rules(valid_row_rules, valid_row_rules[i][0], rule):
+        for i, rows in enumerate(valid_field_rows):
+            if len(rows) == 1:
+                if condence_extra_rows(valid_field_rows, rows[0], i):
                     done = False
+    return valid_field_rows
 
 
-def remove_row_from_other_rules(valid_row_rules: dict, n: int, r: int):
+def condence_extra_rows(valid_field_rows: list, v: int, i: int):
     removed = False
-    for rule, i in enumerate(valid_row_rules):
-        if rule == r:
+    for j, rows in enumerate(valid_field_rows):
+        if j == i:
             continue
-        if n in valid_row_rules[i]:
+        if v in rows:
+            rows.remove(v)
             removed = True
-            valid_row_rules[i].remove(n)
     return removed
 
 
-def get_target_rules(s: str, t: str) -> list:
-    r = []
-    for i, s in enumerate(s.splitlines()):
-        if t in s:
-            r.append(i)
-    return r
+def valid_field_row_permutations(valid_field_rows: list, i: int, per: list, l: list) -> list:
+    if i >= len(per):
+        l.append(per.copy())
+        return
+    for j in valid_field_rows[i]:
+        if not j in per[:i]:
+            per[i] = j
+            valid_field_row_permutations(valid_field_rows, i + 1, per, l)
+    return l
 
 
-def validate_ticket(s: str, t: str):
-    rule_order = get_valid_ticket_row_permutaitions(s)[0]
+def validate_ticket(s: str, t: str) -> int:
+    fields, my_ticket, nearby_tickets = s.split("\n\n")
+    target_fields = read_target_fields(fields, t)
+    fields = read_fields(fields)
+    my_ticket = read_tickets(my_ticket)
+    nearby_tickets = discard_invalid(read_tickets(nearby_tickets), fields)
+    valid_field_rows = condence_valid_field_rows(validate_field_rows(my_ticket + nearby_tickets, fields))
+    valid_field_permutations = valid_field_row_permutations(valid_field_rows, 0, [0] * len(fields), [])
+    if len(valid_field_permutations) > 1:
+        print("ERROR: multiple valid results")
+    valid_field_permutation = valid_field_permutations[0]
+    return validate_fields(valid_field_permutation, target_fields, my_ticket[0])
 
-    rules, my_ticket, other_tickets = s.split("\n\n")
-    target_rules = get_target_rules(rules, t)
-    my_ticket_data = read_tickets(my_ticket)[0]
 
+def validate_fields(valid_field_permutation, target_fields, my_ticket) -> int:
     s = 0
-    for i, j in enumerate(rule_order):
-        if j in target_rules:
+    for i, j in enumerate(valid_field_permutation):
+        if j in target_fields:
             if s == 0:
-                s = my_ticket_data[i]
+                s = my_ticket[i]
             else:
-                s *= my_ticket_data[i]
+                s *= my_ticket[i]
     return s
 
 
@@ -160,8 +136,9 @@ nearby tickets:
 3,9,18
 15,1,5
 5,14,9"""
-test_output = [[1, 0, 2]]
-assert get_valid_ticket_row_permutaitions(test_input) == test_output
+test_input2 = "row"
+test_output = 11
+assert validate_ticket(test_input, test_input2) == test_output
 
 
 f = open("inputs/input_16.txt")
