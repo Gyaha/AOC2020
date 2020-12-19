@@ -3,16 +3,17 @@ TARGET_TURN = 2020
 
 def play_memory_game(s: str) -> int:
     d = [int(a) for a in s.split(",")]
-    m = {}
-    t = 0
+    m = [0] * TARGET_TURN
+    for t, n in enumerate(d, 1):
+        m[n] = t
     n = 0
-    f = True
-    for p in d:
-        t += 1
-        m[p] = t
-    while t + 1 < TARGET_TURN:
-        t += 1
-        m, n = do_turn(m, n, t)
+    c = 0
+    for t in range(len(d) + 1, TARGET_TURN):
+        c = m[n]
+        if c:
+            m[n], n = t, t - c
+        else:
+            m[n], n = t, 0
     return n
 
 
