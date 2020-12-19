@@ -46,23 +46,29 @@ def get_error_rate(rules: list, tickets: list) -> int:
     return s
 
 
-test_input = """class: 1-3 or 5-7
-row: 6-11 or 33-44
-seat: 13-40 or 45-50
+def run_tests():
+    test_input = """class: 1-3 or 5-7
+    row: 6-11 or 33-44
+    seat: 13-40 or 45-50
 
-your ticket:
-7,1,14
+    your ticket:
+    7,1,14
 
-nearby tickets:
-7,3,47
-40,4,50
-55,2,20
-38,6,12"""
-test_output = 71
-assert read_input_and_get_error_rate(test_input) == test_output
+    nearby tickets:
+    7,3,47
+    40,4,50
+    55,2,20
+    38,6,12"""
+    test_output = 71
+    assert read_input_and_get_error_rate(test_input) == test_output
 
 
-f = open("inputs/input_16.txt")
-d = f.read()
-f.close()
-print(read_input_and_get_error_rate(d))
+def run() -> int:
+    with open("inputs/input_16.txt") as file:
+        data = file.read()
+    return read_input_and_get_error_rate(data)
+
+
+if __name__ == "__main__":
+    run_tests()
+    print(run())

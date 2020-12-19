@@ -27,36 +27,42 @@ def do_turn(m: dict, n: int, t: int):
     return m, n
 
 
-test_input = "0,3,6"
-test_output = 436
-assert play_memory_game(test_input) == test_output
+def run_tests():
+    test_input = "0,3,6"
+    test_output = 436
+    assert play_memory_game(test_input) == test_output
 
-test_input = "1,3,2"
-test_output = 1
-assert play_memory_game(test_input) == test_output
+    test_input = "1,3,2"
+    test_output = 1
+    assert play_memory_game(test_input) == test_output
 
-test_input = "2,1,3"
-test_output = 10
-assert play_memory_game(test_input) == test_output
+    test_input = "2,1,3"
+    test_output = 10
+    assert play_memory_game(test_input) == test_output
 
-test_input = "1,2,3"
-test_output = 27
-assert play_memory_game(test_input) == test_output
+    test_input = "1,2,3"
+    test_output = 27
+    assert play_memory_game(test_input) == test_output
 
-test_input = "2,3,1"
-test_output = 78
-assert play_memory_game(test_input) == test_output
+    test_input = "2,3,1"
+    test_output = 78
+    assert play_memory_game(test_input) == test_output
+
+    test_input = "3,2,1"
+    test_output = 438
+    assert play_memory_game(test_input) == test_output
+
+    test_input = "3,1,2"
+    test_output = 1836
+    assert play_memory_game(test_input) == test_output
 
 
-test_input = "3,2,1"
-test_output = 438
-assert play_memory_game(test_input) == test_output
+def run() -> int:
+    with open("inputs/input_15.txt") as file:
+        data = file.read()
+    return play_memory_game(data)
 
-test_input = "3,1,2"
-test_output = 1836
-assert play_memory_game(test_input) == test_output
 
-f = open("inputs/input_15.txt")
-d = f.read()
-f.close()
-print(play_memory_game(d))
+if __name__ == "__main__":
+    run_tests()
+    print(run())

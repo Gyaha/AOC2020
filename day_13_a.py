@@ -12,13 +12,20 @@ def find_next_bus(s: str) -> int:
     return next_bus[0] * next_bus[1]
 
 
-test_input = """939
-7,13,x,x,59,x,31,19"""
-test_output = 295
+def run_tests():
+    test_input = """939
+    7,13,x,x,59,x,31,19"""
+    test_output = 295
 
-assert find_next_bus(test_input) == test_output
+    assert find_next_bus(test_input) == test_output
 
-f = open("inputs/input_13.txt")
-d = f.read()
-f.close()
-print(find_next_bus(d))
+
+def run() -> int:
+    with open("inputs/input_13.txt") as file:
+        data = file.read()
+    return find_next_bus(data)
+
+
+if __name__ == "__main__":
+    run_tests()
+    print(run())

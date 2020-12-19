@@ -36,21 +36,27 @@ def run_program(inst_raw: str) -> int:
     return acc
 
 
-test_input = """nop +0
-acc +1
-jmp +4
-acc +3
-jmp -3
-acc -99
-acc +1
-jmp -4
-acc +6"""
-test_output = 5
+def run_tests():
+    test_input = """nop +0
+    acc +1
+    jmp +4
+    acc +3
+    jmp -3
+    acc -99
+    acc +1
+    jmp -4
+    acc +6"""
+    test_output = 5
 
-assert run_program(test_input) == test_output
+    assert run_program(test_input) == test_output
 
 
-f = open("inputs/input_08.txt")
-d = f.read()
-f.close()
-print(run_program(d))
+def run() -> int:
+    with open("inputs/input_08.txt") as file:
+        data = file.read()
+    return run_program(data)
+
+
+if __name__ == "__main__":
+    run_tests()
+    print(run())

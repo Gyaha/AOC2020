@@ -1,5 +1,5 @@
 def count_unique_awnsers_in_group(s: str) -> int:
-    return len(set(list(s.replace("\n", ""))))
+    return len(set(list(s.replace("\n", "").replace(" ", ""))))
 
 
 def sum_group_awnsers(s: str) -> int:
@@ -9,33 +9,40 @@ def sum_group_awnsers(s: str) -> int:
     return r
 
 
-test_input = """abcx
-abcy
-abcz"""
-test_output = 6
+def run_tests():
+    test_input = """abcx
+    abcy
+    abcz"""
+    test_output = 6
 
-assert count_unique_awnsers_in_group(test_input) == test_output
+    assert count_unique_awnsers_in_group(test_input) == test_output
 
-test_input = """abc
+    test_input = """abc
 
-a
-b
-c
+    a
+    b
+    c
 
-ab
-ac
+    ab
+    ac
 
-a
-a
-a
-a
+    a
+    a
+    a
+    a
 
-b"""
-test_output = 11
+    b"""
+    test_output = 11
 
-assert sum_group_awnsers(test_input) == test_output
+    assert sum_group_awnsers(test_input) == test_output
 
-f = open("inputs/input_06.txt")
-d = f.read()
-f.close()
-print(sum_group_awnsers(d))
+
+def run() -> int:
+    with open("inputs/input_06.txt") as file:
+        data = file.read()
+    return sum_group_awnsers(data)
+
+
+if __name__ == "__main__":
+    run_tests()
+    print(run())

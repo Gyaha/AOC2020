@@ -63,7 +63,7 @@ def simulate_seats(seat_map: list) -> bool:
 
 
 def simulate_seatmap(s: str) -> int:
-    seat_map = [[b for b in a] for a in s.splitlines()]
+    seat_map = [[b for b in a.strip()] for a in s.splitlines()]
     while simulate_seats(seat_map):
         pass
     c = 0
@@ -72,21 +72,27 @@ def simulate_seatmap(s: str) -> int:
     return c
 
 
-test_input = """L.LL.LL.LL
-LLLLLLL.LL
-L.L.L..L..
-LLLL.LL.LL
-L.LL.LL.LL
-L.LLLLL.LL
-..L.L.....
-LLLLLLLLLL
-L.LLLLLL.L
-L.LLLLL.LL"""
-test_output = 26
-assert simulate_seatmap(test_input) == test_output
+def run_tests():
+    test_input = """L.LL.LL.LL
+    LLLLLLL.LL
+    L.L.L..L..
+    LLLL.LL.LL
+    L.LL.LL.LL
+    L.LLLLL.LL
+    ..L.L.....
+    LLLLLLLLLL
+    L.LLLLLL.L
+    L.LLLLL.LL"""
+    test_output = 26
+    assert simulate_seatmap(test_input) == test_output
 
 
-f = open("inputs/input_11.txt")
-d = f.read()
-f.close()
-print(simulate_seatmap(d))
+def run() -> int:
+    with open("inputs/input_11.txt") as file:
+        data = file.read()
+    return simulate_seatmap(data)
+
+
+if __name__ == "__main__":
+    run_tests()
+    print(run())

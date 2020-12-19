@@ -13,31 +13,37 @@ def find_preamble(s: str, p: int) -> int:
             return l[i + p]
 
 
-test_input = """35
-20
-15
-25
-47
-40
-62
-55
-65
-95
-102
-117
-150
-182
-127
-219
-299
-277
-309
-576"""
-test_output = 127
-assert find_preamble(test_input, 5) == test_output
+def run_tests():
+    test_input = """35
+    20
+    15
+    25
+    47
+    40
+    62
+    55
+    65
+    95
+    102
+    117
+    150
+    182
+    127
+    219
+    299
+    277
+    309
+    576"""
+    test_output = 127
+    assert find_preamble(test_input, 5) == test_output
 
 
-f = open("inputs/input_09.txt")
-d = f.read()
-f.close()
-print(find_preamble(d, 25))
+def run() -> int:
+    with open("inputs/input_09.txt") as file:
+        data = file.read()
+    return find_preamble(data, 25)
+
+
+if __name__ == "__main__":
+    run_tests()
+    print(run())

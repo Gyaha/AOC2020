@@ -1,5 +1,5 @@
 # (x,y,z)
-# [cude, neighbors]
+# [cube, neighbors]
 
 from itertools import product
 
@@ -63,7 +63,7 @@ def do_turn(grid: dict):
 def create_grid(s: str) -> dict:
     grid = {}
     for y, l in enumerate(s.splitlines()):
-        for x, c in enumerate(list(l)):
+        for x, c in enumerate(list(l.strip())):
             if c == "#":
                 set_cube(grid, x, y, 0)
     return grid
@@ -80,14 +80,21 @@ def load_input_and_run_and_count(s: str, t: int) -> int:
     return count_cubes(grid)
 
 
-test_input = """.#.
-..#
-###"""
-test_output = 112
+def run_tests():
+    test_input = """.#.
+    ..#
+    ###"""
+    test_output = 112
 
-assert load_input_and_run_and_count(test_input, 6) == test_output
+    assert load_input_and_run_and_count(test_input, 6) == test_output
 
-f = open("inputs/input_17.txt")
-d = f.read()
-f.close()
-print(load_input_and_run_and_count(d, 6))
+
+def run() -> int:
+    with open("inputs/input_17.txt") as file:
+        data = file.read()
+    return load_input_and_run_and_count(data, 6)
+
+
+if __name__ == "__main__":
+    run_tests()
+    print(run())

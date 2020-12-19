@@ -12,37 +12,44 @@ def translate_pass_to_seat(inp: str) -> int:
     return (translate_row(inp[:-3]) * 8) + translate_column(inp[-3:])
 
 
-def get_higest_seat(arr) -> int:
+def get_higest_seat(s: str) -> int:
+    d = [n.strip() for n in s.splitlines()]
     h = 0
-    for p in arr:
+    for p in d:
         seat = translate_pass_to_seat(p)
         if seat > h:
             h = seat
     return h
 
 
-test_input = "FBFBBFF"
-test_output = 44
-assert translate_row(test_input) == test_output
+def run_tests():
+    test_input = "FBFBBFF"
+    test_output = 44
+    assert translate_row(test_input) == test_output
 
-test_input = "BBFFBBF"
-test_output = 102
-assert translate_row(test_input) == test_output
+    test_input = "BBFFBBF"
+    test_output = 102
+    assert translate_row(test_input) == test_output
 
-test_input = "RLR"
-test_output = 5
-assert translate_column(test_input) == test_output
+    test_input = "RLR"
+    test_output = 5
+    assert translate_column(test_input) == test_output
 
-test_input = "RLL"
-test_output = 4
-assert translate_column(test_input) == test_output
+    test_input = "RLL"
+    test_output = 4
+    assert translate_column(test_input) == test_output
 
-test_input = "BFFFBBFRRR"
-test_output = 567
-assert translate_pass_to_seat(test_input) == test_output
+    test_input = "BFFFBBFRRR"
+    test_output = 567
+    assert translate_pass_to_seat(test_input) == test_output
 
 
-f = open("inputs/input_05.txt")
-d = [n.replace("\n", "") for n in f.readlines()]
-f.close()
-print(get_higest_seat(d))
+def run() -> int:
+    with open("inputs/input_05.txt") as file:
+        data = file.read()
+    return get_higest_seat(data)
+
+
+if __name__ == "__main__":
+    run_tests()
+    print(run())

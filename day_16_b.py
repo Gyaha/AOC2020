@@ -125,23 +125,29 @@ def validate_fields(valid_field_permutation, target_fields, my_ticket) -> int:
     return s
 
 
-test_input = """class: 0-1 or 4-19
-row: 0-5 or 8-19
-seat: 0-13 or 16-19
+def run_tests():
+    test_input = """class: 0-1 or 4-19
+    row: 0-5 or 8-19
+    seat: 0-13 or 16-19
 
-your ticket:
-11,12,13
+    your ticket:
+    11,12,13
 
-nearby tickets:
-3,9,18
-15,1,5
-5,14,9"""
-test_input2 = "row"
-test_output = 11
-assert validate_ticket(test_input, test_input2) == test_output
+    nearby tickets:
+    3,9,18
+    15,1,5
+    5,14,9"""
+    test_input2 = "row"
+    test_output = 11
+    assert validate_ticket(test_input, test_input2) == test_output
 
 
-f = open("inputs/input_16.txt")
-d = f.read()
-f.close()
-print(validate_ticket(d, "departure"))
+def run() -> int:
+    with open("inputs/input_16.txt") as file:
+        data = file.read()
+    return validate_ticket(data, "departure")
+
+
+if __name__ == "__main__":
+    run_tests()
+    print(run())

@@ -56,21 +56,27 @@ def try_swap_jmp_for_nop(s: str) -> int:
                 return acc
 
 
-test_input = """nop +0
-acc +1
-jmp +4
-acc +3
-jmp -3
-acc -99
-acc +1
-jmp -4
-acc +6"""
-test_output = 8
+def run_tests():
+    test_input = """nop +0
+    acc +1
+    jmp +4
+    acc +3
+    jmp -3
+    acc -99
+    acc +1
+    jmp -4
+    acc +6"""
+    test_output = 8
 
-assert try_swap_jmp_for_nop(test_input) == test_output
+    assert try_swap_jmp_for_nop(test_input) == test_output
 
 
-f = open("inputs/input_08.txt")
-d = f.read()
-f.close()
-print(try_swap_jmp_for_nop(d))
+def run() -> int:
+    with open("inputs/input_08.txt") as file:
+        data = file.read()
+    return try_swap_jmp_for_nop(data)
+
+
+if __name__ == "__main__":
+    run_tests()
+    print(run())

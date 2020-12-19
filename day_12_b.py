@@ -38,7 +38,7 @@ def manhatten_dist(x: int, y: int) -> int:
 
 
 def stumble_about(s: str) -> (int, int):
-    l = [a for a in s.splitlines()]
+    l = [a.strip() for a in s.splitlines()]
     x, y = 0, 0
     vx, vy = 10, 1
     for a in l:
@@ -57,16 +57,22 @@ def stumble_about_manhatten(s: str) -> int:
     return manhatten_dist(x, y)
 
 
-test_input = """F10
-N3
-F7
-R90
-F11"""
-test_output = 286
-assert stumble_about_manhatten(test_input) == test_output
+def run_tests():
+    test_input = """F10
+    N3
+    F7
+    R90
+    F11"""
+    test_output = 286
+    assert stumble_about_manhatten(test_input) == test_output
 
 
-f = open("inputs/input_12.txt")
-d = f.read()
-f.close()
-print(stumble_about_manhatten(d))
+def run() -> int:
+    with open("inputs/input_12.txt") as file:
+        data = file.read()
+    return stumble_about_manhatten(data)
+
+
+if __name__ == "__main__":
+    run_tests()
+    print(run())

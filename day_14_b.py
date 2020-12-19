@@ -36,7 +36,7 @@ def insert_data_into_multi_memory(memory: dict, bitmask: list, t: int, b: list):
 
 
 def read_docking_data(s: str):
-    d = [l for l in s.strip("\n").splitlines()]
+    d = [l.strip() for l in s.strip("\n").splitlines()]
     bitmask = None
     memory = {}
     for l in d:
@@ -53,15 +53,22 @@ def read_docking_data(s: str):
     return s
 
 
-test_input = """mask = 000000000000000000000000000000X1001X
-mem[42] = 100
-mask = 00000000000000000000000000000000X0XX
-mem[26] = 1"""
-test_output = 208
-assert read_docking_data(test_input) == test_output
+def run_tests():
+    test_input = """mask = 000000000000000000000000000000X1001X
+    mem[42] = 100
+    mask = 00000000000000000000000000000000X0XX
+    mem[26] = 1"""
+
+    test_output = 208
+    assert read_docking_data(test_input) == test_output
 
 
-f = open("inputs/input_14.txt")
-d = f.read()
-f.close()
-print(read_docking_data(d))
+def run() -> int:
+    with open("inputs/input_14.txt") as file:
+        data = file.read()
+    return read_docking_data(data)
+
+
+if __name__ == "__main__":
+    run_tests()
+    print(run())

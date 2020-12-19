@@ -24,34 +24,41 @@ def does_bus_align(b: tuple, t: int) -> bool:
     return (t + b[1]) % b[0] == 0
 
 
-assert does_bus_align((7, 0), 1068781)
-assert does_bus_align((13, 1), 1068781)
-assert does_bus_align((59, 4), 1068781)
+def run_tests():
+    assert does_bus_align((7, 0), 1068781)
+    assert does_bus_align((13, 1), 1068781)
+    assert does_bus_align((59, 4), 1068781)
 
-test_input = """939
-7,13,x,x,59,x,31,19"""
-test_output = 1068781
-assert find_bus_alignment(test_input) == test_output
+    test_input = """939
+    7,13,x,x,59,x,31,19"""
+    test_output = 1068781
+    assert find_bus_alignment(test_input) == test_output
 
-test_input = """0
-17,x,13,19
-"""
-test_output = 3417
-assert find_bus_alignment(test_input) == test_output
+    test_input = """0
+    17,x,13,19
+    """
+    test_output = 3417
+    assert find_bus_alignment(test_input) == test_output
 
-test_input = """0
-67,7,59,61
-"""
-test_output = 754018
-assert find_bus_alignment(test_input) == test_output
+    test_input = """0
+    67,7,59,61
+    """
+    test_output = 754018
+    assert find_bus_alignment(test_input) == test_output
 
-test_input = """0
-1789,37,47,1889
-"""
-test_output = 1202161486
-assert find_bus_alignment(test_input) == test_output
+    test_input = """0
+    1789,37,47,1889
+    """
+    test_output = 1202161486
+    assert find_bus_alignment(test_input) == test_output
 
-f = open("inputs/input_13.txt")
-d = f.read()
-f.close()
-print(find_bus_alignment(d))
+
+def run() -> int:
+    with open("inputs/input_13.txt") as file:
+        data = file.read()
+    return find_bus_alignment(data)
+
+
+if __name__ == "__main__":
+    run_tests()
+    print(run())
