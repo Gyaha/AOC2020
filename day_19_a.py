@@ -8,98 +8,55 @@ def count_valid_messages(s: str):
     return s
 
 
-def validate_message(memory: dict, rules: list, rule: list, message: list, depth: int = 0) -> bool:
-    log = False
-    pr, pm, pr1, pm1, pr2, pm2 = "", "", "", "", "", ""
+def validate_message(memory: dict, rules: list, rule: list, message: list) -> bool:
+    if rule[0] < 0:
+        return len(message) == 1 and message[0] == rule[0]
 
     f, s = mem_get(memory, rule, message)
     if f:
         return s
 
-    if log:
-        pr = "".join([str(r) for r in rule])
-        pm = "".join(message)
-        print(f"{' ' * depth}? {pr} + {pm}")
-
-    if type(rule[0]) == str:
-        if len(message) == 1 and message[0] == rule[0]:
-            if log:
-                print(f"{' ' * depth}T {message[0]} = {rule[0]}")
-            mem_set(memory, rule, message, True)
-            return True
-        else:
-            if log:
-                print(f"{' ' * depth}F {message[0]} = {rule[0]}")
-            mem_set(memory, rule, message, False)
-            return False
-
     if len(rule) > 1:
         for i in range(1, len(message) - (len(rule) - 2)):
-            if log:
-                pr1 = "".join([str(r) for r in [rule[0]]])
-                pm1 = "".join(message[:i])
-                pr2 = "".join([str(r) for r in rule[1:]])
-                pm2 = "".join(message[i:])
-                print(f"{' ' * depth}/ {pr1} + {pm1} / {pr2} + {pm2}")
-
-            if validate_message(memory, rules, [rule[0]], message[:i], depth + 1) and validate_message(memory, rules, rule[1:], message[i:], depth + 1):
-                if log:
-                    print(f"{' ' * depth}T {pr1} + {pm1} / {pr2} + {pm2}")
-
+            if validate_message(memory, rules, [rule[0]], message[:i]) and validate_message(memory, rules, rule[1:], message[i:]):
                 mem_set(memory, rule, message, True)
                 return True
-
     else:
         r = rules[rule[0]]
         if len(r) > 1:
             for i in range(len(r)):
-                if log:
-                    pr1 = "".join([str(r) for r in r[i]])
-                    pm1 = "".join(message)
-                    print(f"{' ' * depth}< {pr1} + {pm1}")
-
-                if validate_message(memory, rules, r[i], message, depth + 1):
-                    if log:
-                        print(f"{' ' * depth}T {pr1} + {pm1}")
-
+                if validate_message(memory, rules, r[i], message):
                     mem_set(memory, rule, message, True)
                     return True
         else:
-            return validate_message(memory, rules, r[0], message, depth + 1)
-    if log:
-        print(f"{' ' * depth}F {pr} + {pm}")
+            return validate_message(memory, rules, r[0], message)
+
     mem_set(memory, rule, message, False)
     return False
 
 
 def mem_get(memory: dict, rule: list, message: list) -> (bool, bool):
-    log = False
-    i = "_".join([str(r) for r in rule]) + "".join(message)
-    if i in memory:
-        if log:
-            print(f"mem_fnd - {i} - {memory[i]}")
-        return True, memory[i]
+    i = tuple(rule + [-3] + message)
+    if not (m := memory.get(i, -3)) == -3:
+        return True, m
     else:
         return False, False
 
 
 def mem_set(memory: dict, rule: list, message: list, status: bool):
-    log = False
-    i = "_".join([str(r) for r in rule]) + "".join(message)
-    if i in memory:
-        print(f"ERROR: {i} is in mem")
-    if log:
-        print(f"mem_set: {i} - {status}")
+    i = tuple(rule + [-3] + message)
     memory[i] = status
 
 
 def convert_rules(rules: str) -> list:
     rule_lines = rules.splitlines()
-    r = [[] for _ in rule_lines]
+    r = []
     for rule in rule_lines:
         rule_id, rule_text = rule.strip().split(": ")
         rule_id = int(rule_id)
         rule_text = convert_rule_text(rule_text)
+        while len(r) <= rule_id:
+            r.append([])
         r[rule_id] = rule_text
     return r
 
@@ -111,7 +68,10 @@ def convert_rule_text(s: str) -> list:
         if c.isnumeric():
             l2.append(int(c))
         elif "\"" in c:
-            l2.append(c[1])
+            if c[1] == "a":
+                l2.append(-1)
+            else:
+                l2.append(-2)
         else:  # |
             l.append(l2)
             l2 = []
@@ -120,7 +80,7 @@ def convert_rule_text(s: str) -> list:
 
 
 def convert_messages(messages: str) -> list:
-    m = [list(i.strip()) for i in messages.splitlines()]
+    m = [[-1 if j == "a" else -2 for j in i] for i in [list(i.strip()) for i in messages.splitlines()]]
     return m
 
 
@@ -149,4 +109,8 @@ def run() -> int:
 
 if __name__ == "__main__":
     run_tests()
+    import time
+    time_start = time.perf_counter()
     print(run())
+    time_end = time.perf_counter() - time_start
+    print(f"Time: {time_end:0.4f} sec")
