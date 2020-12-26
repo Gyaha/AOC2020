@@ -41,6 +41,10 @@ import day_20_a
 import day_20_b
 import day_21_a
 import day_21_b
+import day_22_a
+import day_22_b
+import day_23_a
+import day_23_b
 
 
 def time_day(i: str, a_run, b_run) -> float:
@@ -78,6 +82,8 @@ def time_days():
     time_total += time_day("19", day_19_a.run, day_19_b.run)
     time_total += time_day("20", day_20_a.run, day_20_b.run)
     time_total += time_day("21", day_21_a.run, day_21_b.run)
+    time_total += time_day("22", day_22_a.run, day_22_b.run)
+    time_total += time_day("23", day_23_a.run, day_23_b.run)
     print(f"Total - {time_total:0.4f} sec")
 
 
