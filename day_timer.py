@@ -47,6 +47,7 @@ import day_23_a
 import day_23_b
 import day_24_a
 import day_24_b
+import day_25_a
 
 
 def time_day(i: str, a_run, b_run) -> float:
@@ -54,7 +55,8 @@ def time_day(i: str, a_run, b_run) -> float:
     a_run()
     time_a = time.perf_counter() - time_start
     time_start = time.perf_counter()
-    b_run()
+    if b_run != None:
+        b_run()
     time_b = time.perf_counter() - time_start
     time_total = time_a + time_b
     print(f"Day {i}: A: {time_a:0.4f}, B: {time_b:0.4f}, Total: {time_total:0.4f}")
@@ -87,6 +89,7 @@ def time_days():
     time_total += time_day("22", day_22_a.run, day_22_b.run)
     time_total += time_day("23", day_23_a.run, day_23_b.run)
     time_total += time_day("24", day_24_a.run, day_24_b.run)
+    time_total += time_day("25", day_25_a.run, None)
     print(f"Total - {time_total:0.4f} sec")
 
 
