@@ -9,12 +9,6 @@ def find_two_that_add_up_to_target(s: str) -> int:
                 return n[i] * n[j]
 
 
-def run() -> int:
-    with open("inputs/input_01.txt") as file:
-        data = file.read()
-    return find_two_that_add_up_to_target(data)
-
-
 def run_tests():
     test_input = """1721
     979
@@ -24,6 +18,12 @@ def run_tests():
     1456"""
     test_output = 514579
     assert find_two_that_add_up_to_target(test_input) == test_output
+
+
+def run() -> int:
+    with open("inputs/input_01.txt") as file:
+        data = file.read()
+    return find_two_that_add_up_to_target(data)
 
 
 if __name__ == "__main__":
