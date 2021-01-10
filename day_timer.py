@@ -49,6 +49,8 @@ import day_24_a
 import day_24_b
 import day_25_a
 
+import day_15
+
 
 def time_day(i: str, a_run, b_run) -> float:
     time_start = time.perf_counter()
@@ -59,11 +61,13 @@ def time_day(i: str, a_run, b_run) -> float:
         b_run()
     time_b = time.perf_counter() - time_start
     time_total = time_a + time_b
-    print(f"Day {i}: A: {time_a:0.4f}, B: {time_b:0.4f}, Total: {time_total:0.4f}")
+    print(f"{i}\t{time_a:0.2f}\t{time_b:0.2f}\t{time_total:0.4f}")
     return time_total
 
 
 def time_days():
+    print("ADVENT OF CODE 2020")
+    print("Day\tA\tB\tTotal")
     time_total = 0
     time_total += time_day("01", day_01_a.run, day_01_b.run)
     time_total += time_day("02", day_02_a.run, day_02_b.run)
@@ -80,6 +84,7 @@ def time_days():
     time_total += time_day("13", day_13_a.run, day_13_b.run)
     time_total += time_day("14", day_14_a.run, day_14_b.run)
     time_total += time_day("15", day_15_a.run, day_15_b.run)
+    time_total += time_day("+c", day_15.run_a, day_15.run_b)
     time_total += time_day("16", day_16_a.run, day_16_b.run)
     time_total += time_day("17", day_17_a.run, day_17_b.run)
     time_total += time_day("18", day_18_a.run, day_18_b.run)
